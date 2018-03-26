@@ -12,6 +12,9 @@ namespace Browser
 
         public static VirtuosBigFileReader reader;
         public static VFileSystem fileSystem;
+        public static Queue<string> consoleLog;
+
+        const int LOGSIZE = 50;
 
         /// <summary>
         /// The main entry point for the application.
@@ -19,10 +22,17 @@ namespace Browser
         [STAThread]
         static void Main()
         {
-
+            consoleLog = new Queue<string>(LOGSIZE);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+        }
+
+        public static void Log(string message)
+        {
+            if (consoleLog.Count == LOGSIZE)
+                consoleLog.Dequeue();
+            consoleLog.Enqueue(message);
         }
 
         public static bool LoadVBF(string path)

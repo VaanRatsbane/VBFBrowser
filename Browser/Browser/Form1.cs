@@ -24,8 +24,16 @@ namespace Browser
             if (openVBFDialog.ShowDialog() == DialogResult.OK)
             {
                 Program.LoadVBF(openVBFDialog.FileName);
+                Log("VBF loaded.");
                 PopulateTreeView();
+                Log("File system initialized.");
             }
+        }
+
+        private void Log(string message)
+        {
+            progressLabel.Text = message;
+            Program.Log(message);
         }
 
         //Explorer
@@ -146,6 +154,45 @@ namespace Browser
                 treeView1.SelectedNode = treeView1.SelectedNode.Parent;
                 treeView1_NodeMouseClick(sender, args);
             }
+        }
+
+        //Open progress dialog
+        private void progressLabel_Click(object sender, EventArgs e)
+        {
+            logButton_Click(sender, e);
+        }
+        private void logButton_Click(object sender, EventArgs e)
+        {
+            LogForm form = new LogForm();
+        }
+
+        //File drag enter
+        private void listView1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.All;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        //File drag drop
+        private void listView1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] filePaths = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+
+            string[] report;
+            bool isValidInjection = Program.fileSystem.VerifyInjection(filePaths, out report);
+            if (report != null)
+            {
+                Log("Some files do not have a match within the vbf:");
+                foreach (var rep in report)
+                    Log(rep);
+            }
+
+            if (isValidInjection)
+                ;//inject files TODO
+            else
+                MessageBox.Show("Files not injected. Check log.");
         }
     }
 }

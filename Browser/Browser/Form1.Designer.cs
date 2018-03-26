@@ -32,26 +32,30 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.masterContainer = new System.Windows.Forms.SplitContainer();
+            this.prevBtn = new System.Windows.Forms.Button();
+            this.exitPicButton = new System.Windows.Forms.PictureBox();
+            this.loadPicButton = new System.Windows.Forms.PictureBox();
             this.secondContainer = new System.Windows.Forms.SplitContainer();
             this.browserContainer = new System.Windows.Forms.SplitContainer();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.injectButton = new System.Windows.Forms.Button();
+            this.extractButton = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.nameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.origSizeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.loadPicButton = new System.Windows.Forms.PictureBox();
-            this.exitPicButton = new System.Windows.Forms.PictureBox();
-            this.injectButton = new System.Windows.Forms.Button();
-            this.extractButton = new System.Windows.Forms.Button();
+            this.progressLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.openVBFDialog = new System.Windows.Forms.OpenFileDialog();
             this.injectFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.injectFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.extractLocationDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.prevBtn = new System.Windows.Forms.Button();
+            this.logButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.masterContainer)).BeginInit();
             this.masterContainer.Panel1.SuspendLayout();
             this.masterContainer.Panel2.SuspendLayout();
             this.masterContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.secondContainer)).BeginInit();
             this.secondContainer.Panel1.SuspendLayout();
             this.secondContainer.Panel2.SuspendLayout();
@@ -60,8 +64,6 @@
             this.browserContainer.Panel1.SuspendLayout();
             this.browserContainer.Panel2.SuspendLayout();
             this.browserContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).BeginInit();
             this.SuspendLayout();
             // 
             // imageList1
@@ -91,6 +93,33 @@
             this.masterContainer.SplitterDistance = 46;
             this.masterContainer.TabIndex = 0;
             // 
+            // prevBtn
+            // 
+            this.prevBtn.Location = new System.Drawing.Point(395, 16);
+            this.prevBtn.Name = "prevBtn";
+            this.prevBtn.Size = new System.Drawing.Size(75, 23);
+            this.prevBtn.TabIndex = 2;
+            this.prevBtn.Text = "Previous";
+            this.prevBtn.UseVisualStyleBackColor = true;
+            this.prevBtn.Click += new System.EventHandler(this.prevBtn_Click);
+            // 
+            // exitPicButton
+            // 
+            this.exitPicButton.Location = new System.Drawing.Point(131, 3);
+            this.exitPicButton.Name = "exitPicButton";
+            this.exitPicButton.Size = new System.Drawing.Size(102, 37);
+            this.exitPicButton.TabIndex = 1;
+            this.exitPicButton.TabStop = false;
+            // 
+            // loadPicButton
+            // 
+            this.loadPicButton.Location = new System.Drawing.Point(12, 3);
+            this.loadPicButton.Name = "loadPicButton";
+            this.loadPicButton.Size = new System.Drawing.Size(102, 37);
+            this.loadPicButton.TabIndex = 0;
+            this.loadPicButton.TabStop = false;
+            this.loadPicButton.Click += new System.EventHandler(this.loadPicButton_Click);
+            // 
             // secondContainer
             // 
             this.secondContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -104,6 +133,8 @@
             // 
             // secondContainer.Panel2
             // 
+            this.secondContainer.Panel2.Controls.Add(this.logButton);
+            this.secondContainer.Panel2.Controls.Add(this.progressLabel);
             this.secondContainer.Panel2.Controls.Add(this.label1);
             this.secondContainer.Size = new System.Drawing.Size(784, 511);
             this.secondContainer.SplitterDistance = 478;
@@ -140,48 +171,6 @@
             this.treeView1.TabIndex = 0;
             this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
             // 
-            // listView1
-            // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.nameHeader,
-            this.origSizeHeader});
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.listView1.Location = new System.Drawing.Point(0, 0);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(389, 450);
-            this.listView1.SmallImageList = this.imageList1;
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.DoubleClick += new System.EventHandler(this.listView1_DoubleClick);
-            // 
-            // nameHeader
-            // 
-            this.nameHeader.Text = "Name";
-            this.nameHeader.Width = 226;
-            // 
-            // origSizeHeader
-            // 
-            this.origSizeHeader.Text = "Original Size";
-            this.origSizeHeader.Width = 158;
-            // 
-            // loadPicButton
-            // 
-            this.loadPicButton.Location = new System.Drawing.Point(12, 3);
-            this.loadPicButton.Name = "loadPicButton";
-            this.loadPicButton.Size = new System.Drawing.Size(102, 37);
-            this.loadPicButton.TabIndex = 0;
-            this.loadPicButton.TabStop = false;
-            this.loadPicButton.Click += new System.EventHandler(this.loadPicButton_Click);
-            // 
-            // exitPicButton
-            // 
-            this.exitPicButton.Location = new System.Drawing.Point(131, 3);
-            this.exitPicButton.Name = "exitPicButton";
-            this.exitPicButton.Size = new System.Drawing.Size(102, 37);
-            this.exitPicButton.TabIndex = 1;
-            this.exitPicButton.TabStop = false;
-            // 
             // injectButton
             // 
             this.injectButton.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -202,6 +191,43 @@
             this.extractButton.Text = "Extract";
             this.extractButton.UseVisualStyleBackColor = true;
             // 
+            // listView1
+            // 
+            this.listView1.AllowDrop = true;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.nameHeader,
+            this.origSizeHeader});
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.listView1.Location = new System.Drawing.Point(0, 0);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(389, 450);
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.TabIndex = 0;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.listView1_DragDrop);
+            this.listView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listView1_DragEnter);
+            this.listView1.DoubleClick += new System.EventHandler(this.listView1_DoubleClick);
+            // 
+            // nameHeader
+            // 
+            this.nameHeader.Text = "Name";
+            this.nameHeader.Width = 226;
+            // 
+            // origSizeHeader
+            // 
+            this.origSizeHeader.Text = "Original Size";
+            this.origSizeHeader.Width = 158;
+            // 
+            // progressLabel
+            // 
+            this.progressLabel.Location = new System.Drawing.Point(392, 4);
+            this.progressLabel.Name = "progressLabel";
+            this.progressLabel.Size = new System.Drawing.Size(368, 16);
+            this.progressLabel.TabIndex = 1;
+            this.progressLabel.Text = "...";
+            this.progressLabel.Click += new System.EventHandler(this.progressLabel_Click);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -219,15 +245,14 @@
             // 
             this.injectFileDialog.FileName = "openFileDialog1";
             // 
-            // prevBtn
+            // logButton
             // 
-            this.prevBtn.Location = new System.Drawing.Point(395, 16);
-            this.prevBtn.Name = "prevBtn";
-            this.prevBtn.Size = new System.Drawing.Size(75, 23);
-            this.prevBtn.TabIndex = 2;
-            this.prevBtn.Text = "Previous";
-            this.prevBtn.UseVisualStyleBackColor = true;
-            this.prevBtn.Click += new System.EventHandler(this.prevBtn_Click);
+            this.logButton.Location = new System.Drawing.Point(754, 2);
+            this.logButton.Name = "logButton";
+            this.logButton.Size = new System.Drawing.Size(27, 23);
+            this.logButton.TabIndex = 2;
+            this.logButton.UseVisualStyleBackColor = true;
+            this.logButton.Click += new System.EventHandler(this.logButton_Click);
             // 
             // Form1
             // 
@@ -244,6 +269,8 @@
             this.masterContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.masterContainer)).EndInit();
             this.masterContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).EndInit();
             this.secondContainer.Panel1.ResumeLayout(false);
             this.secondContainer.Panel2.ResumeLayout(false);
             this.secondContainer.Panel2.PerformLayout();
@@ -253,8 +280,6 @@
             this.browserContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.browserContainer)).EndInit();
             this.browserContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -278,6 +303,8 @@
         private System.Windows.Forms.FolderBrowserDialog injectFolderDialog;
         private System.Windows.Forms.FolderBrowserDialog extractLocationDialog;
         private System.Windows.Forms.Button prevBtn;
+        private System.Windows.Forms.Label progressLabel;
+        private System.Windows.Forms.Button logButton;
     }
 }
 

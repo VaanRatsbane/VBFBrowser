@@ -1,12 +1,16 @@
 ﻿using Browser.VBFTool;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Browser
 {
+    /// <summary>
+    /// Virtual file system. Represents the VBF file structure for GUI representation.
+    /// </summary>
     class VFileSystem
     {
 
@@ -28,6 +32,45 @@ namespace Browser
             }
 
             Console.WriteLine($"Added {folderCount} folders and {fileCount} files.");
+        }
+
+        internal bool VerifyInjection(string[] filePaths, out string[] report)
+        {
+            //first get prefix path (all path until filename, including \)
+            var prefix = filePaths[0].Substring(0, filePaths[0].LastIndexOf('\\') + 1);
+            var currentPath = currentFolder.GetPath();
+
+            //parse dir names into multiple child filenames
+            var files = parseFilePaths(filePaths);
+
+            var reports = new List<string>();
+
+            //then remove prefix path from all file paths, and prefix them with currentFolder instead
+            for (int i = 0; i < files.Count; i++)
+            {
+                var virtualPath = currentPath + files[i].Replace(prefix, "");
+                //verify their existence
+                if (!root.HasFile(virtualPath))
+                    reports.Add(files[i]);
+            }
+            report = reports.ToArray();
+            return reports.Count == 0;
+
+        }
+
+        private List<string> parseFilePaths(string[] filePaths)
+        {
+            var files = new List<string>();
+            foreach (var p in filePaths)
+            {
+                if (!Directory.Exists(p))
+                    files.Add(p);
+                else
+                {
+                    files.AddRange(parseFilePaths(Directory.EnumerateFiles(p).ToArray()).ToArray());
+                }
+            }
+            return files;
         }
 
     }
@@ -113,9 +156,30 @@ namespace Browser
             return folders.ToArray();
         }
 
+        public string GetPath()
+        {
+            return (parent == null ? "" : parent.GetPath()) + $"\\{name}";
+        }
+
         public bool HasFolder(string folderName)
         {
             return ((children.ContainsKey(folderName)) && (children[folderName] is VFolder));
+        }
+
+        public bool HasFile(string path)
+        {
+            path = path.Substring(1); //remove the backslash
+            var fragments = path.Split('\\'); //gets each element
+            if (fragments.Length > 1) //if there's more than 1 element
+            {
+                if (HasFolder(fragments[0])) //checks if first folder exists
+                    return HasFile(String.Concat(fragments.Skip(1))); //skip the first element and recurse in that folder
+                else
+                    return false; //folder doesn't exist, so false
+            }
+            //if only one fragment, return true if contain file
+            else return children.ContainsKey(fragments[0]) && children[fragments[0]] is VFile;
+                
         }
         
     }
@@ -129,6 +193,7 @@ namespace Browser
         public VFile(string name, ulong originalSize, int fileIndex, VFolder parent = null) : base(name, parent)
         {
             this.originalSize = originalSize;
+            this.fileIndex = fileIndex;
         }
     }
 
