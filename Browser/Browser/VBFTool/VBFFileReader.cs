@@ -15,7 +15,7 @@ namespace Browser.VBFTool
     {
         public ulong NumFiles => mNumFiles;
 
-        private string mBigFilePath;
+        public string mBigFilePath;
         private ushort[] mBlockList;
         private uint[] mBlockListStarts;
         private string[] mFileNameMd5s;

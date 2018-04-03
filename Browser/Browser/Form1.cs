@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -26,29 +27,34 @@ namespace Browser
         {
             if (openVBFDialog.ShowDialog() == DialogResult.OK)
             {
-                if (Program.LoadVBF(openVBFDialog.FileName))
-                {
-                    Log("VBF loaded.");
+                LoadVBF(openVBFDialog.FileName);
+            }
+        }
 
-                    PopulateTreeView();
-                    Log("File system initialized.");
+        private void LoadVBF(string filePath)
+        {
+            if (Program.LoadVBF(filePath))
+            {
+                Log("VBF loaded.");
 
-                    prevBtn.Enabled = true;
-                    collapseButton.Enabled = true;
-                    injectButton.Enabled = true;
-                    extractButton.Enabled = true;
-                }
-                else
-                {
-                    treeView1.Nodes.Clear();
-                    listView1.Clear();
-                    prevBtn.Enabled = false;
-                    collapseButton.Enabled = false;
-                    injectButton.Enabled = false;
-                    extractButton.Enabled = false;
-                    MessageBox.Show("Failed to open the file.");
-                    Log("Failed to open the file.");
-                }
+                PopulateTreeView();
+                Log("File system initialized.");
+
+                prevBtn.Enabled = true;
+                collapseButton.Enabled = true;
+                injectButton.Enabled = true;
+                extractButton.Enabled = true;
+            }
+            else
+            {
+                treeView1.Nodes.Clear();
+                listView1.Items.Clear();
+                prevBtn.Enabled = false;
+                collapseButton.Enabled = false;
+                injectButton.Enabled = false;
+                extractButton.Enabled = false;
+                MessageBox.Show("Failed to open the file.");
+                Log("Failed to open the file.");
             }
         }
 
@@ -145,6 +151,9 @@ namespace Browser
         {
             TreeNode newSelected = e.Node;
             listView1.Items.Clear();
+
+            if (newSelected == null) return;
+
             VFolder nodeDirInfo = (VFolder)newSelected.Tag;
             ListViewItem.ListViewSubItem[] subItems;
             ListViewItem item = null;
@@ -238,7 +247,52 @@ namespace Browser
 
         private void inject(string[] filePaths)
         {
-            //inject files TODO
+            string tempDirectory;
+            do
+            {
+                tempDirectory = Path.Combine(Path.GetTempPath(), "VBFBROWSER" + Path.GetRandomFileName());
+            } while (Directory.Exists(tempDirectory));
+            Directory.CreateDirectory(tempDirectory);
+            var prefixes = Program.fileSystem.currentFolder.GetPath().Substring(1);
+            Directory.CreateDirectory(tempDirectory + prefixes);
+            foreach (var path in filePaths)
+            {
+                if (Directory.Exists(path))
+                    DirectoryCopy(path, tempDirectory + prefixes + "\\" + path.Split('\\').Last(), true);
+                else if (File.Exists(path))
+                    File.Copy(path, tempDirectory + prefixes + "\\" + Path.GetFileName(path));
+            }
+
+            var sb = new StringBuilder();
+
+            Process process = new Process();
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.FileName = "ff12-vbf\\ff12-vbf.exe";
+            process.StartInfo.Arguments = $"-r \"{tempDirectory}\" {Program.reader.mBigFilePath}";
+
+            process.OutputDataReceived += (sender, args) => sb.Append(args.Data);
+            process.ErrorDataReceived += (sender, args) => sb.Append(args.Data);
+
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            process.WaitForExit();
+
+            Log(sb.ToString());
+
+            Directory.Delete(tempDirectory, true);
+
+            MessageBox.Show("Done.");
+
+            if(Program.fileSystem.isRaw)
+            {
+                MessageBox.Show("First time injecting files in this VBF. Reinitializing.");
+                LoadVBF(Program.reader.mBigFilePath);
+            }
+
         }
 
         private void extractButton_Click(object sender, EventArgs e)
@@ -299,6 +353,44 @@ namespace Browser
                 currentSelection = rootNode;
                 treeView1.SelectedNode = currentSelection;
                 treeView1_NodeMouseClick(sender, args);
+            }
+        }
+
+        private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+            }
+
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string temppath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(temppath, false);
+            }
+
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string temppath = Path.Combine(destDirName, subdir.Name);
+                    DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+                }
             }
         }
     }

@@ -96,6 +96,7 @@
             // 
             // prevBtn
             // 
+            this.prevBtn.Enabled = false;
             this.prevBtn.Location = new System.Drawing.Point(395, 16);
             this.prevBtn.Name = "prevBtn";
             this.prevBtn.Size = new System.Drawing.Size(75, 23);
@@ -178,6 +179,7 @@
             // injectButton
             // 
             this.injectButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.injectButton.Enabled = false;
             this.injectButton.Location = new System.Drawing.Point(0, 450);
             this.injectButton.Name = "injectButton";
             this.injectButton.Size = new System.Drawing.Size(391, 28);
@@ -188,6 +190,7 @@
             // extractButton
             // 
             this.extractButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.extractButton.Enabled = false;
             this.extractButton.Location = new System.Drawing.Point(0, 450);
             this.extractButton.Name = "extractButton";
             this.extractButton.Size = new System.Drawing.Size(389, 28);
@@ -265,6 +268,7 @@
             // 
             // collapseButton
             // 
+            this.collapseButton.Enabled = false;
             this.collapseButton.Location = new System.Drawing.Point(313, 3);
             this.collapseButton.Name = "collapseButton";
             this.collapseButton.Size = new System.Drawing.Size(75, 23);
