@@ -1,6 +1,6 @@
 ﻿namespace Browser
 {
-    partial class LogForm
+    partial class LoaderForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,34 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.logBox = new System.Windows.Forms.TextBox();
-            this.SuspendLayout();
-            // 
-            // logBox
-            // 
-            this.logBox.Location = new System.Drawing.Point(13, 13);
-            this.logBox.Multiline = true;
-            this.logBox.Name = "logBox";
-            this.logBox.ReadOnly = true;
-            this.logBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logBox.Size = new System.Drawing.Size(412, 425);
-            this.logBox.TabIndex = 0;
-            // 
-            // LogForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(437, 450);
-            this.Controls.Add(this.logBox);
-            this.Name = "LogForm";
-            this.Text = "LogForm";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Text = "LoaderForm";
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox logBox;
     }
 }

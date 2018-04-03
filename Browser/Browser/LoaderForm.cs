@@ -10,14 +10,11 @@ using System.Windows.Forms;
 
 namespace Browser
 {
-    public partial class LogForm : Form
+    public partial class LoaderForm : Form
     {
-        public LogForm(Form parent)
+        public LoaderForm()
         {
             InitializeComponent();
-            this.Owner = parent;
-            logBox.Lines = Program.consoleLog.ToArray();
-            logBox.DeselectAll();
         }
     }
 }

@@ -43,13 +43,14 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.nameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.origSizeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.logButton = new System.Windows.Forms.Button();
             this.progressLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.openVBFDialog = new System.Windows.Forms.OpenFileDialog();
             this.injectFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.injectFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.extractLocationDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.logButton = new System.Windows.Forms.Button();
+            this.collapseButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.masterContainer)).BeginInit();
             this.masterContainer.Panel1.SuspendLayout();
             this.masterContainer.Panel2.SuspendLayout();
@@ -110,6 +111,7 @@
             this.exitPicButton.Size = new System.Drawing.Size(102, 37);
             this.exitPicButton.TabIndex = 1;
             this.exitPicButton.TabStop = false;
+            this.exitPicButton.Click += new System.EventHandler(this.exitPicButton_Click);
             // 
             // loadPicButton
             // 
@@ -148,6 +150,7 @@
             // 
             // browserContainer.Panel1
             // 
+            this.browserContainer.Panel1.Controls.Add(this.collapseButton);
             this.browserContainer.Panel1.Controls.Add(this.treeView1);
             this.browserContainer.Panel1.Controls.Add(this.injectButton);
             // 
@@ -169,6 +172,7 @@
             this.treeView1.SelectedImageIndex = 0;
             this.treeView1.Size = new System.Drawing.Size(391, 450);
             this.treeView1.TabIndex = 0;
+            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
             // 
             // injectButton
@@ -190,6 +194,7 @@
             this.extractButton.TabIndex = 1;
             this.extractButton.Text = "Extract";
             this.extractButton.UseVisualStyleBackColor = true;
+            this.extractButton.Click += new System.EventHandler(this.extractButton_Click);
             // 
             // listView1
             // 
@@ -219,6 +224,15 @@
             this.origSizeHeader.Text = "Original Size";
             this.origSizeHeader.Width = 158;
             // 
+            // logButton
+            // 
+            this.logButton.Location = new System.Drawing.Point(754, 2);
+            this.logButton.Name = "logButton";
+            this.logButton.Size = new System.Drawing.Size(27, 23);
+            this.logButton.TabIndex = 2;
+            this.logButton.UseVisualStyleBackColor = true;
+            this.logButton.Click += new System.EventHandler(this.logButton_Click);
+            // 
             // progressLabel
             // 
             this.progressLabel.Location = new System.Drawing.Point(392, 4);
@@ -245,14 +259,19 @@
             // 
             this.injectFileDialog.FileName = "openFileDialog1";
             // 
-            // logButton
+            // extractLocationDialog
             // 
-            this.logButton.Location = new System.Drawing.Point(754, 2);
-            this.logButton.Name = "logButton";
-            this.logButton.Size = new System.Drawing.Size(27, 23);
-            this.logButton.TabIndex = 2;
-            this.logButton.UseVisualStyleBackColor = true;
-            this.logButton.Click += new System.EventHandler(this.logButton_Click);
+            this.extractLocationDialog.Description = "Select extract location:";
+            // 
+            // collapseButton
+            // 
+            this.collapseButton.Location = new System.Drawing.Point(313, 3);
+            this.collapseButton.Name = "collapseButton";
+            this.collapseButton.Size = new System.Drawing.Size(75, 23);
+            this.collapseButton.TabIndex = 1;
+            this.collapseButton.Text = "Collapse All";
+            this.collapseButton.UseVisualStyleBackColor = true;
+            this.collapseButton.Click += new System.EventHandler(this.collapseButton_Click);
             // 
             // Form1
             // 
@@ -305,6 +324,7 @@
         private System.Windows.Forms.Button prevBtn;
         private System.Windows.Forms.Label progressLabel;
         private System.Windows.Forms.Button logButton;
+        private System.Windows.Forms.Button collapseButton;
     }
 }
 

@@ -46,6 +46,7 @@ namespace Browser
             }
             catch(Exception)
             {
+                fileSystem = null;
                 return false;
             }
         }

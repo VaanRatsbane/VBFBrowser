@@ -24,6 +24,7 @@ namespace Browser
             fileCount = reader.mNumFiles;
             folderCount = 0;
             root = new VFolder("");
+            currentFolder = root;
 
             var fileList = reader.ReadFileList();
             for(int i = 0; i < fileList.Count(); i++)
@@ -42,16 +43,27 @@ namespace Browser
 
             //parse dir names into multiple child filenames
             var files = parseFilePaths(filePaths);
-
             var reports = new List<string>();
+
+            if (files.Count == 0) //only folders
+            {
+                reports.Add("No files found in the injection folder.");
+                report = reports.ToArray();
+                return false;
+            }
+
 
             //then remove prefix path from all file paths, and prefix them with currentFolder instead
             for (int i = 0; i < files.Count; i++)
             {
-                var virtualPath = currentPath + files[i].Replace(prefix, "");
+                var virtualPath = currentPath + "\\" + files[i].Replace(prefix, "");
                 //verify their existence
                 if (!root.HasFile(virtualPath))
+                {
+                    if (reports.Count == 0)
+                        reports.Add("Some files do not have a match within the vbf:");
                     reports.Add(files[i]);
+                }
             }
             report = reports.ToArray();
             return reports.Count == 0;
@@ -67,7 +79,7 @@ namespace Browser
                     files.Add(p);
                 else
                 {
-                    files.AddRange(parseFilePaths(Directory.EnumerateFiles(p).ToArray()).ToArray());
+                    files.AddRange(parseFilePaths(Directory.EnumerateFiles(p,"*.*",SearchOption.AllDirectories).ToArray()).ToArray());
                 }
             }
             return files;
@@ -86,6 +98,11 @@ namespace Browser
             this.parent = parent;
         }
 
+        public string GetPath()
+        {
+            return (parent == null ? "" : parent.GetPath()) + "/" + $"{name}";
+        }
+
     }
 
     class VFolder : VUnit
@@ -100,7 +117,8 @@ namespace Browser
 
         public ulong AddFile(string path, int fileIndex, ulong originalSize)
         {
-            path = path.Remove(1); //Assuming every path starts at /
+            if (path[0] == '/')
+                path = path.TrimStart('/');
             var splices = path.Split('/');
             if(splices.Length == 1) //it's the file!
             {
@@ -138,6 +156,11 @@ namespace Browser
             return children.ContainsKey(childName) ? children[childName] : null;
         }
 
+        public List<VUnit> GetChildren()
+        {
+            return new List<VUnit>(children.Values);
+        }
+
         public VFolder[] GetChildFolders()
         {
             List<VFolder> folders = new List<VFolder>();
@@ -156,11 +179,6 @@ namespace Browser
             return folders.ToArray();
         }
 
-        public string GetPath()
-        {
-            return (parent == null ? "" : parent.GetPath()) + $"\\{name}";
-        }
-
         public bool HasFolder(string folderName)
         {
             return ((children.ContainsKey(folderName)) && (children[folderName] is VFolder));
@@ -168,12 +186,13 @@ namespace Browser
 
         public bool HasFile(string path)
         {
-            path = path.Substring(1); //remove the backslash
+            if(path.StartsWith("\\"))
+                path = path.Substring(1); //remove the backslash
             var fragments = path.Split('\\'); //gets each element
             if (fragments.Length > 1) //if there's more than 1 element
             {
                 if (HasFolder(fragments[0])) //checks if first folder exists
-                    return HasFile(String.Concat(fragments.Skip(1))); //skip the first element and recurse in that folder
+                    return (GetChild(fragments[0]) as VFolder).HasFile(String.Join("\\", fragments, 1, fragments.Length - 1)); //skip the first element and recurse in that folder
                 else
                     return false; //folder doesn't exist, so false
             }
