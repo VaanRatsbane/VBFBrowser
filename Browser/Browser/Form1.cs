@@ -20,6 +20,13 @@ namespace Browser
         public Form1()
         {
             InitializeComponent();
+            if(!(Directory.Exists("ff12-vbf") && File.Exists("ff12-vbf\\ff12-phyre.exe") && File.Exists("ff12-vbf\\ff12-vbf.exe") &&
+                File.Exists("ff12-vbf\\libgcc_s_seh-1.dll") && File.Exists("ff12-vbf\\libstdc++-6.dll") &&
+                File.Exists("ff12-vbf\\libwinpthread-1.dll") && File.Exists("ff12-vbf\\zlib1.dll")))
+            {
+                MessageBox.Show("ffgriever's tools are missing. Exiting...");
+                Environment.Exit(1);
+            }
         }
         
         // LOAD VBF
@@ -44,6 +51,7 @@ namespace Browser
                 collapseButton.Enabled = true;
                 injectButton.Enabled = true;
                 extractButton.Enabled = true;
+                treeView1_AfterSelect(null, new TreeViewEventArgs(currentSelection));
             }
             else
             {
@@ -263,7 +271,7 @@ namespace Browser
                     File.Copy(path, tempDirectory + prefixes + "\\" + Path.GetFileName(path));
             }
 
-            var sb = new StringBuilder();
+            var logList = new List<string>();
 
             Process process = new Process();
             process.StartInfo.RedirectStandardOutput = true;
@@ -273,15 +281,16 @@ namespace Browser
             process.StartInfo.FileName = "ff12-vbf\\ff12-vbf.exe";
             process.StartInfo.Arguments = $"-r \"{tempDirectory}\" {Program.reader.mBigFilePath}";
 
-            process.OutputDataReceived += (sender, args) => sb.Append(args.Data);
-            process.ErrorDataReceived += (sender, args) => sb.Append(args.Data);
+            process.OutputDataReceived += (sender, args) => logList.Add(args.Data);
+            process.ErrorDataReceived += (sender, args) => logList.Add(args.Data);
 
             process.Start();
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
             process.WaitForExit();
 
-            Log(sb.ToString());
+            foreach(var msg in logList)
+                Log(msg);
 
             Directory.Delete(tempDirectory, true);
 
@@ -349,11 +358,51 @@ namespace Browser
             if (currentSelection != null)
             {
                 treeView1.CollapseAll();
-                TreeNodeMouseClickEventArgs args = new TreeNodeMouseClickEventArgs(currentSelection.Parent, MouseButtons.Left, 1, 0, 0);
                 currentSelection = rootNode;
                 treeView1.SelectedNode = currentSelection;
+                TreeNodeMouseClickEventArgs args = new TreeNodeMouseClickEventArgs(currentSelection, MouseButtons.Left, 1, 0, 0);
                 treeView1_NodeMouseClick(sender, args);
             }
+        }
+
+        private void injectButton_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Are you injecting a whole folder?", "File Injection", MessageBoxButtons.YesNo);
+            var filePaths = new List<string>();
+            if (dialogResult == DialogResult.Yes)
+            {
+                if (injectFolderDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var path = injectFolderDialog.SelectedPath;
+                    filePaths.AddRange(Directory.GetDirectories(path));
+                    filePaths.AddRange(Directory.GetFiles(path));
+                }
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                if(injectFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePaths.AddRange(injectFileDialog.FileNames);
+                }
+            }
+            if(filePaths.Count > 0)
+                inject(filePaths.ToArray());
+        }
+
+        private void aboutLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var about = new AboutForm(this);
+            about.ShowDialog();
+        }
+
+        private void howToUseLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show("First, load the VBF file you wish to browse.\n" +
+                "You can navigate the structure using the tree view on the left, or the list on the right.\n" +
+                "You can extract folders/files by selecting them in the list on the right and then choosing \"Extract\"." +
+                " You can select more than one item by holding Ctrl.\n" +
+                "To inject a folder/file, browse to where you want to inject it, select \"Inject\" and" +
+                " choose wether you are injecting files or a whole folder. You can also drag what you wish to inject to the list view on the right.");
         }
 
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)

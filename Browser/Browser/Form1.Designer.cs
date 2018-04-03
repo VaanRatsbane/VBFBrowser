@@ -33,16 +33,17 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.masterContainer = new System.Windows.Forms.SplitContainer();
             this.prevBtn = new System.Windows.Forms.Button();
-            this.exitPicButton = new System.Windows.Forms.PictureBox();
-            this.loadPicButton = new System.Windows.Forms.PictureBox();
             this.secondContainer = new System.Windows.Forms.SplitContainer();
             this.browserContainer = new System.Windows.Forms.SplitContainer();
+            this.collapseButton = new System.Windows.Forms.Button();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.injectButton = new System.Windows.Forms.Button();
             this.extractButton = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.nameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.origSizeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.howToUseLink = new System.Windows.Forms.LinkLabel();
+            this.aboutLinkLabel = new System.Windows.Forms.LinkLabel();
             this.logButton = new System.Windows.Forms.Button();
             this.progressLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,13 +51,12 @@
             this.injectFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.injectFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.extractLocationDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.collapseButton = new System.Windows.Forms.Button();
+            this.exitPicButton = new System.Windows.Forms.PictureBox();
+            this.loadPicButton = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.masterContainer)).BeginInit();
             this.masterContainer.Panel1.SuspendLayout();
             this.masterContainer.Panel2.SuspendLayout();
             this.masterContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.secondContainer)).BeginInit();
             this.secondContainer.Panel1.SuspendLayout();
             this.secondContainer.Panel2.SuspendLayout();
@@ -65,6 +65,8 @@
             this.browserContainer.Panel1.SuspendLayout();
             this.browserContainer.Panel2.SuspendLayout();
             this.browserContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).BeginInit();
             this.SuspendLayout();
             // 
             // imageList1
@@ -105,24 +107,6 @@
             this.prevBtn.UseVisualStyleBackColor = true;
             this.prevBtn.Click += new System.EventHandler(this.prevBtn_Click);
             // 
-            // exitPicButton
-            // 
-            this.exitPicButton.Location = new System.Drawing.Point(131, 3);
-            this.exitPicButton.Name = "exitPicButton";
-            this.exitPicButton.Size = new System.Drawing.Size(102, 37);
-            this.exitPicButton.TabIndex = 1;
-            this.exitPicButton.TabStop = false;
-            this.exitPicButton.Click += new System.EventHandler(this.exitPicButton_Click);
-            // 
-            // loadPicButton
-            // 
-            this.loadPicButton.Location = new System.Drawing.Point(12, 3);
-            this.loadPicButton.Name = "loadPicButton";
-            this.loadPicButton.Size = new System.Drawing.Size(102, 37);
-            this.loadPicButton.TabIndex = 0;
-            this.loadPicButton.TabStop = false;
-            this.loadPicButton.Click += new System.EventHandler(this.loadPicButton_Click);
-            // 
             // secondContainer
             // 
             this.secondContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -136,6 +120,8 @@
             // 
             // secondContainer.Panel2
             // 
+            this.secondContainer.Panel2.Controls.Add(this.howToUseLink);
+            this.secondContainer.Panel2.Controls.Add(this.aboutLinkLabel);
             this.secondContainer.Panel2.Controls.Add(this.logButton);
             this.secondContainer.Panel2.Controls.Add(this.progressLabel);
             this.secondContainer.Panel2.Controls.Add(this.label1);
@@ -163,6 +149,17 @@
             this.browserContainer.SplitterDistance = 391;
             this.browserContainer.TabIndex = 1;
             // 
+            // collapseButton
+            // 
+            this.collapseButton.Enabled = false;
+            this.collapseButton.Location = new System.Drawing.Point(313, 3);
+            this.collapseButton.Name = "collapseButton";
+            this.collapseButton.Size = new System.Drawing.Size(75, 23);
+            this.collapseButton.TabIndex = 1;
+            this.collapseButton.Text = "Collapse All";
+            this.collapseButton.UseVisualStyleBackColor = true;
+            this.collapseButton.Click += new System.EventHandler(this.collapseButton_Click);
+            // 
             // treeView1
             // 
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -186,6 +183,7 @@
             this.injectButton.TabIndex = 0;
             this.injectButton.Text = "Inject";
             this.injectButton.UseVisualStyleBackColor = true;
+            this.injectButton.Click += new System.EventHandler(this.injectButton_Click);
             // 
             // extractButton
             // 
@@ -227,6 +225,32 @@
             this.origSizeHeader.Text = "Original Size";
             this.origSizeHeader.Width = 158;
             // 
+            // howToUseLink
+            // 
+            this.howToUseLink.ActiveLinkColor = System.Drawing.Color.Blue;
+            this.howToUseLink.AutoSize = true;
+            this.howToUseLink.Location = new System.Drawing.Point(128, 7);
+            this.howToUseLink.Name = "howToUseLink";
+            this.howToUseLink.Size = new System.Drawing.Size(67, 13);
+            this.howToUseLink.TabIndex = 4;
+            this.howToUseLink.TabStop = true;
+            this.howToUseLink.Text = "How To Use";
+            this.howToUseLink.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.howToUseLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.howToUseLink_LinkClicked);
+            // 
+            // aboutLinkLabel
+            // 
+            this.aboutLinkLabel.ActiveLinkColor = System.Drawing.Color.Blue;
+            this.aboutLinkLabel.AutoSize = true;
+            this.aboutLinkLabel.Location = new System.Drawing.Point(74, 7);
+            this.aboutLinkLabel.Name = "aboutLinkLabel";
+            this.aboutLinkLabel.Size = new System.Drawing.Size(35, 13);
+            this.aboutLinkLabel.TabIndex = 3;
+            this.aboutLinkLabel.TabStop = true;
+            this.aboutLinkLabel.Text = "About";
+            this.aboutLinkLabel.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.aboutLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.aboutLinkLabel_LinkClicked);
+            // 
             // logButton
             // 
             this.logButton.Location = new System.Drawing.Point(754, 2);
@@ -266,16 +290,25 @@
             // 
             this.extractLocationDialog.Description = "Select extract location:";
             // 
-            // collapseButton
+            // exitPicButton
             // 
-            this.collapseButton.Enabled = false;
-            this.collapseButton.Location = new System.Drawing.Point(313, 3);
-            this.collapseButton.Name = "collapseButton";
-            this.collapseButton.Size = new System.Drawing.Size(75, 23);
-            this.collapseButton.TabIndex = 1;
-            this.collapseButton.Text = "Collapse All";
-            this.collapseButton.UseVisualStyleBackColor = true;
-            this.collapseButton.Click += new System.EventHandler(this.collapseButton_Click);
+            this.exitPicButton.Image = global::Browser.Properties.Resources.exitButton;
+            this.exitPicButton.Location = new System.Drawing.Point(131, 3);
+            this.exitPicButton.Name = "exitPicButton";
+            this.exitPicButton.Size = new System.Drawing.Size(102, 37);
+            this.exitPicButton.TabIndex = 1;
+            this.exitPicButton.TabStop = false;
+            this.exitPicButton.Click += new System.EventHandler(this.exitPicButton_Click);
+            // 
+            // loadPicButton
+            // 
+            this.loadPicButton.Image = global::Browser.Properties.Resources.openButton;
+            this.loadPicButton.Location = new System.Drawing.Point(12, 3);
+            this.loadPicButton.Name = "loadPicButton";
+            this.loadPicButton.Size = new System.Drawing.Size(102, 37);
+            this.loadPicButton.TabIndex = 0;
+            this.loadPicButton.TabStop = false;
+            this.loadPicButton.Click += new System.EventHandler(this.loadPicButton_Click);
             // 
             // Form1
             // 
@@ -284,16 +317,16 @@
             this.ClientSize = new System.Drawing.Size(784, 561);
             this.Controls.Add(this.masterContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
+            this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "s";
+            this.Text = "VBF Browser";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             this.masterContainer.Panel1.ResumeLayout(false);
             this.masterContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.masterContainer)).EndInit();
             this.masterContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).EndInit();
             this.secondContainer.Panel1.ResumeLayout(false);
             this.secondContainer.Panel2.ResumeLayout(false);
             this.secondContainer.Panel2.PerformLayout();
@@ -303,6 +336,8 @@
             this.browserContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.browserContainer)).EndInit();
             this.browserContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -329,6 +364,8 @@
         private System.Windows.Forms.Label progressLabel;
         private System.Windows.Forms.Button logButton;
         private System.Windows.Forms.Button collapseButton;
+        private System.Windows.Forms.LinkLabel aboutLinkLabel;
+        private System.Windows.Forms.LinkLabel howToUseLink;
     }
 }
 

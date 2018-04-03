@@ -17,7 +17,7 @@ namespace Browser
             InitializeComponent();
             this.Owner = parent;
             logBox.Lines = Program.consoleLog.ToArray();
-            logBox.DeselectAll();
+            logBox.SelectionLength = 0;
         }
     }
 }
