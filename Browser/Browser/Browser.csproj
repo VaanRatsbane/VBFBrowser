@@ -103,9 +103,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ff12-vbf\ff12-phyre.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="ff12-vbf\ff12-vbf.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -121,6 +118,7 @@
     <Content Include="ff12-vbf\zlib1.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\AdeptPersonalAnole-max-1mb.gif" />
     <Content Include="vaanicon.ico" />
     <None Include="Resources\exitButton.png" />
     <None Include="Resources\openButton.png" />

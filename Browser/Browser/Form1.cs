@@ -20,7 +20,7 @@ namespace Browser
         public Form1()
         {
             InitializeComponent();
-            if(!(Directory.Exists("ff12-vbf") && File.Exists("ff12-vbf\\ff12-phyre.exe") && File.Exists("ff12-vbf\\ff12-vbf.exe") &&
+            if(!(Directory.Exists("ff12-vbf") && File.Exists("ff12-vbf\\ff12-vbf.exe") &&
                 File.Exists("ff12-vbf\\libgcc_s_seh-1.dll") && File.Exists("ff12-vbf\\libstdc++-6.dll") &&
                 File.Exists("ff12-vbf\\libwinpthread-1.dll") && File.Exists("ff12-vbf\\zlib1.dll")))
             {
@@ -34,7 +34,9 @@ namespace Browser
         {
             if (openVBFDialog.ShowDialog() == DialogResult.OK)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 LoadVBF(openVBFDialog.FileName);
+                Cursor.Current = Cursors.Default;
             }
         }
 
@@ -105,10 +107,13 @@ namespace Browser
         //Navigate using the tree
         private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            NodeMouseClick(sender, e);
+        }
+        private void NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e, bool wasUpdated = false)
+        {
             var ev = new TreeViewEventArgs(e.Node);
-            treeView1_AfterSelect(sender, ev);
+            AfterSelect(sender, ev, wasUpdated);
             Program.fileSystem.currentFolder = e.Node.Tag as VFolder;
-
         }
 
         //Same as treeView1_NodeMouseClick but by double clicking the listview
@@ -157,6 +162,10 @@ namespace Browser
         //update listview based on treeview selection
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            AfterSelect(sender, e);
+        }
+        private void AfterSelect(object sender, TreeViewEventArgs e, bool wasUpdated = false)
+        {
             TreeNode newSelected = e.Node;
             listView1.Items.Clear();
 
@@ -174,6 +183,9 @@ namespace Browser
             }
             foreach (VFile file in nodeDirInfo.GetChildFiles())
             {
+                if (wasUpdated)
+                    file.UpdateSize();
+
                 string size;
                 if (file.originalSize < 1024)
                     size = $"{file.originalSize} bytes";
@@ -211,6 +223,7 @@ namespace Browser
         {
             logButton_Click(sender, e);
         }
+
         private void logButton_Click(object sender, EventArgs e)
         {
             LogForm form = new LogForm(this);
@@ -255,6 +268,7 @@ namespace Browser
 
         private void inject(string[] filePaths)
         {
+            Cursor.Current = Cursors.WaitCursor;
             string tempDirectory;
             do
             {
@@ -279,7 +293,7 @@ namespace Browser
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.FileName = "ff12-vbf\\ff12-vbf.exe";
-            process.StartInfo.Arguments = $"-r \"{tempDirectory}\" {Program.reader.mBigFilePath}";
+            process.StartInfo.Arguments = $"-r \"{tempDirectory}\" \"{Program.reader.mBigFilePath}\"";
 
             process.OutputDataReceived += (sender, args) => logList.Add(args.Data);
             process.ErrorDataReceived += (sender, args) => logList.Add(args.Data);
@@ -289,25 +303,49 @@ namespace Browser
             process.BeginErrorReadLine();
             process.WaitForExit();
 
+            Log("Initializing ff12-vbf.exe...");
             foreach(var msg in logList)
                 Log(msg);
+            Log("Finished injection.");
 
             Directory.Delete(tempDirectory, true);
 
             MessageBox.Show("Done.");
 
-            if(Program.fileSystem.isRaw)
-            {
-                MessageBox.Show("First time injecting files in this VBF. Reinitializing.");
-                LoadVBF(Program.reader.mBigFilePath);
-            }
+            Program.reader.UpdateAfterInjection();
+            TreeNodeMouseClickEventArgs clickArgs = new TreeNodeMouseClickEventArgs(currentSelection, MouseButtons.Left, 1, 0, 0);
+            treeView1.SelectedNode = currentSelection;
+            NodeMouseClick(null, clickArgs, true);
 
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void NavigateTo(string path)
+        {
+            var root = treeView1.Nodes[0];
+            currentSelection = root;
+            var folders = path.TrimStart('/').Split('/');
+            foreach(var folder in folders)
+            {
+                var temp = currentSelection;
+                for(int i = 0; i < currentSelection.Nodes.Count; i++)
+                {
+                    if(currentSelection.Nodes[i].Text == folder)
+                    {
+                        currentSelection = currentSelection.Nodes[i];
+                        break;
+                    }
+                }
+                if (currentSelection == temp)
+                    throw new Exception("Couldn't return to the folder.");
+            }
         }
 
         private void extractButton_Click(object sender, EventArgs e)
         {
             if (extractLocationDialog.ShowDialog() == DialogResult.OK)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 var path = extractLocationDialog.SelectedPath;
                 var items = listView1.SelectedItems;
                 var tags = new List<VUnit>();
@@ -316,6 +354,7 @@ namespace Browser
                     tags.Add(listView1.SelectedItems[i].Tag as VUnit);
                 }
                 extract(tags, path, out int total, out int succeeded);
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show($"Extracted {succeeded} out of the {total} files.");
             }
         }

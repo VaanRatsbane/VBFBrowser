@@ -17,7 +17,6 @@ namespace Browser
         public string systemName;
         public VFolder root, currentFolder;
         public ulong folderCount, fileCount;
-        public bool isRaw;
 
         public VFileSystem(string systemName, VirtuosBigFileReader reader)
         {
@@ -32,8 +31,6 @@ namespace Browser
             {
                 folderCount += root.AddFile(fileList[i], i, reader.mOriginalSizes[i]);
             }
-
-            isRaw = !root.HasFile("vbf_extra.bin");
 
             Console.WriteLine($"Added {folderCount} folders and {fileCount} files.");
         }
@@ -59,7 +56,7 @@ namespace Browser
             //then remove prefix path from all file paths, and prefix them with currentFolder instead
             for (int i = 0; i < files.Count; i++)
             {
-                var virtualPath = currentPath.TrimStart('/') + "\\" + files[i].Replace(prefix, "");
+                var virtualPath = currentPath.TrimStart('/') + "/" + files[i].Replace(prefix, "");
                 //verify their existence
                 if (!root.HasFile(virtualPath))
                 {
@@ -191,11 +188,11 @@ namespace Browser
         {
             if(path.StartsWith("\\"))
                 path = path.Substring(1); //remove the backslash
-            var fragments = path.Split('\\'); //gets each element
+            var fragments = path.Split('/'); //gets each element
             if (fragments.Length > 1) //if there's more than 1 element
             {
                 if (HasFolder(fragments[0])) //checks if first folder exists
-                    return (GetChild(fragments[0]) as VFolder).HasFile(String.Join("\\", fragments, 1, fragments.Length - 1)); //skip the first element and recurse in that folder
+                    return (GetChild(fragments[0]) as VFolder).HasFile(String.Join("/", fragments, 1, fragments.Length - 1)); //skip the first element and recurse in that folder
                 else
                     return false; //folder doesn't exist, so false
             }
@@ -216,6 +213,11 @@ namespace Browser
         {
             this.originalSize = originalSize;
             this.fileIndex = fileIndex;
+        }
+
+        public void UpdateSize()
+        {
+            originalSize = Program.reader.mOriginalSizes[fileIndex];
         }
     }
 

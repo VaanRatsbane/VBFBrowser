@@ -130,6 +130,11 @@ namespace Browser.VBFTool
             }
         }
 
+        public void UpdateAfterInjection()
+        {
+            LoadBigFileFile(mBigFilePath);
+        }
+
         public string[] ReadFileList()
         {
             if (mStringTable == null) return null; // No string table loaded

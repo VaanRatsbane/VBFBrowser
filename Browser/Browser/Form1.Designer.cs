@@ -33,6 +33,8 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.masterContainer = new System.Windows.Forms.SplitContainer();
             this.prevBtn = new System.Windows.Forms.Button();
+            this.exitPicButton = new System.Windows.Forms.PictureBox();
+            this.loadPicButton = new System.Windows.Forms.PictureBox();
             this.secondContainer = new System.Windows.Forms.SplitContainer();
             this.browserContainer = new System.Windows.Forms.SplitContainer();
             this.collapseButton = new System.Windows.Forms.Button();
@@ -51,12 +53,12 @@
             this.injectFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.injectFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.extractLocationDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.exitPicButton = new System.Windows.Forms.PictureBox();
-            this.loadPicButton = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.masterContainer)).BeginInit();
             this.masterContainer.Panel1.SuspendLayout();
             this.masterContainer.Panel2.SuspendLayout();
             this.masterContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.secondContainer)).BeginInit();
             this.secondContainer.Panel1.SuspendLayout();
             this.secondContainer.Panel2.SuspendLayout();
@@ -65,8 +67,6 @@
             this.browserContainer.Panel1.SuspendLayout();
             this.browserContainer.Panel2.SuspendLayout();
             this.browserContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).BeginInit();
             this.SuspendLayout();
             // 
             // imageList1
@@ -106,6 +106,26 @@
             this.prevBtn.Text = "Previous";
             this.prevBtn.UseVisualStyleBackColor = true;
             this.prevBtn.Click += new System.EventHandler(this.prevBtn_Click);
+            // 
+            // exitPicButton
+            // 
+            this.exitPicButton.Image = global::Browser.Properties.Resources.exitButton;
+            this.exitPicButton.Location = new System.Drawing.Point(131, 3);
+            this.exitPicButton.Name = "exitPicButton";
+            this.exitPicButton.Size = new System.Drawing.Size(102, 37);
+            this.exitPicButton.TabIndex = 1;
+            this.exitPicButton.TabStop = false;
+            this.exitPicButton.Click += new System.EventHandler(this.exitPicButton_Click);
+            // 
+            // loadPicButton
+            // 
+            this.loadPicButton.Image = global::Browser.Properties.Resources.openButton;
+            this.loadPicButton.Location = new System.Drawing.Point(12, 3);
+            this.loadPicButton.Name = "loadPicButton";
+            this.loadPicButton.Size = new System.Drawing.Size(102, 37);
+            this.loadPicButton.TabIndex = 0;
+            this.loadPicButton.TabStop = false;
+            this.loadPicButton.Click += new System.EventHandler(this.loadPicButton_Click);
             // 
             // secondContainer
             // 
@@ -253,10 +273,11 @@
             // 
             // logButton
             // 
-            this.logButton.Location = new System.Drawing.Point(754, 2);
+            this.logButton.Location = new System.Drawing.Point(743, 2);
             this.logButton.Name = "logButton";
-            this.logButton.Size = new System.Drawing.Size(27, 23);
+            this.logButton.Size = new System.Drawing.Size(38, 23);
             this.logButton.TabIndex = 2;
+            this.logButton.Text = "Log";
             this.logButton.UseVisualStyleBackColor = true;
             this.logButton.Click += new System.EventHandler(this.logButton_Click);
             // 
@@ -290,26 +311,6 @@
             // 
             this.extractLocationDialog.Description = "Select extract location:";
             // 
-            // exitPicButton
-            // 
-            this.exitPicButton.Image = global::Browser.Properties.Resources.exitButton;
-            this.exitPicButton.Location = new System.Drawing.Point(131, 3);
-            this.exitPicButton.Name = "exitPicButton";
-            this.exitPicButton.Size = new System.Drawing.Size(102, 37);
-            this.exitPicButton.TabIndex = 1;
-            this.exitPicButton.TabStop = false;
-            this.exitPicButton.Click += new System.EventHandler(this.exitPicButton_Click);
-            // 
-            // loadPicButton
-            // 
-            this.loadPicButton.Image = global::Browser.Properties.Resources.openButton;
-            this.loadPicButton.Location = new System.Drawing.Point(12, 3);
-            this.loadPicButton.Name = "loadPicButton";
-            this.loadPicButton.Size = new System.Drawing.Size(102, 37);
-            this.loadPicButton.TabIndex = 0;
-            this.loadPicButton.TabStop = false;
-            this.loadPicButton.Click += new System.EventHandler(this.loadPicButton_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -327,6 +328,8 @@
             this.masterContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.masterContainer)).EndInit();
             this.masterContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).EndInit();
             this.secondContainer.Panel1.ResumeLayout(false);
             this.secondContainer.Panel2.ResumeLayout(false);
             this.secondContainer.Panel2.PerformLayout();
@@ -336,8 +339,6 @@
             this.browserContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.browserContainer)).EndInit();
             this.browserContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.exitPicButton)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loadPicButton)).EndInit();
             this.ResumeLayout(false);
 
         }

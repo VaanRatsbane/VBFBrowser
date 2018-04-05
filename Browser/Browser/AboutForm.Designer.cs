@@ -105,7 +105,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(151, 13);
             this.label4.TabIndex = 6;
-            this.label4.Text = "Last version as of 04/03/2018";
+            this.label4.Text = "Last version as of 04/04/2018";
             // 
             // closeButton
             // 
