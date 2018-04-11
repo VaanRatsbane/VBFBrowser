@@ -56,7 +56,7 @@ namespace Browser
             //then remove prefix path from all file paths, and prefix them with currentFolder instead
             for (int i = 0; i < files.Count; i++)
             {
-                var virtualPath = currentPath.TrimStart('/') + "/" + files[i].Replace(prefix, "");
+                var virtualPath = (currentPath + "/" + files[i].Replace(prefix, "").Replace('\\', '/')).TrimStart('/');
                 //verify their existence
                 if (!root.HasFile(virtualPath))
                 {

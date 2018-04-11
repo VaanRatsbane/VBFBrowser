@@ -320,27 +320,6 @@ namespace Browser
             Cursor.Current = Cursors.Default;
         }
 
-        private void NavigateTo(string path)
-        {
-            var root = treeView1.Nodes[0];
-            currentSelection = root;
-            var folders = path.TrimStart('/').Split('/');
-            foreach(var folder in folders)
-            {
-                var temp = currentSelection;
-                for(int i = 0; i < currentSelection.Nodes.Count; i++)
-                {
-                    if(currentSelection.Nodes[i].Text == folder)
-                    {
-                        currentSelection = currentSelection.Nodes[i];
-                        break;
-                    }
-                }
-                if (currentSelection == temp)
-                    throw new Exception("Couldn't return to the folder.");
-            }
-        }
-
         private void extractButton_Click(object sender, EventArgs e)
         {
             if (extractLocationDialog.ShowDialog() == DialogResult.OK)
